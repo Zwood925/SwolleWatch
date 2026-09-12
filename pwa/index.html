@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>SwolleWatch</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⏱</text></svg>">
+</head>
+<body>
+  <div id="app">
+    <!-- Background layers -->
+    <div class="bg-gradient"></div>
+    <div class="bg-radial" id="bgRadial"></div>
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-pill">SWOLLEWATCH</div>
+    </div>
+
+    <!-- Main Timer -->
+    <div class="timer-container">
+      <div class="ring-wrapper" id="ringWrapper">
+        <svg class="ring-svg" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+          <!-- Glow filter -->
+          <defs>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="4" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+            <filter id="glowStrong">
+              <feGaussianBlur stdDeviation="8" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <!-- Track -->
+          <circle class="ring-track" cx="130" cy="130" r="110" fill="none" stroke-width="8"/>
+          <!-- Progress -->
+          <circle class="ring-progress" id="ringProgress" cx="130" cy="130" r="110" fill="none"
+                  stroke-width="8" stroke-linecap="round"
+                  stroke-dasharray="691.15" stroke-dashoffset="691.15"
+                  transform="rotate(-90 130 130)" filter="url(#glow)"/>
+        </svg>
+        <div class="timer-inner">
+          <div class="phase-label" id="phaseLabel">READY</div>
+          <div class="timer-display" id="timerDisplay">00:00</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segment Info -->
+    <div class="segment-info glass-card" id="segmentInfo">
+      <div class="segment-dot" id="segmentDot"></div>
+      <div class="segment-name" id="segmentName">—</div>
+      <div class="segment-meta" id="segmentMeta">Configure a workout below</div>
+    </div>
+
+    <!-- Voice Cue bar -->
+    <div class="cue-bar" id="cueBar"></div>
+
+    <!-- Upcoming Segments -->
+    <div class="upcoming-section">
+      <div class="section-label">NEXT UP</div>
+      <div class="upcoming-list" id="upcomingList"></div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button class="ctrl-btn ctrl-secondary" id="resetBtn" title="Reset">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.8"/></svg>
+        <span>RESET</span>
+      </button>
+      <button class="ctrl-btn ctrl-primary" id="mainBtn">
+        <svg id="mainBtnIcon" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span id="mainBtnLabel">START</span>
+      </button>
+      <button class="ctrl-btn ctrl-secondary" id="skipBtn" title="Skip">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+        <span>SKIP</span>
+      </button>
+    </div>
+
+    <!-- Configure -->
+    <button class="configure-btn" id="configureBtn" onclick="openEditor()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+      CONFIGURE WORKOUT
+    </button>
+
+    <!-- Editor Modal -->
+    <div class="modal-overlay" id="editorOverlay">
+      <div class="modal glass-card">
+        <div class="modal-header">
+          <h2>Build Workout</h2>
+          <button class="modal-close" id="closeEditor">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="field-group">
+            <label>Workout Name</label>
+            <input type="text" id="workoutName" value="Elite HIIT" placeholder="Workout name">
+          </div>
+          <div class="segments-list" id="segmentsList"></div>
+          <button class="add-seg-btn" id="addSegBtn">+ ADD SEGMENT</button>
+        </div>
+        <div class="modal-footer">
+          <button class="modal-cancel" id="cancelEditor">Cancel</button>
+          <button class="modal-save" id="saveEditor">SAVE</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TTS Settings Modal -->
+    <div class="modal-overlay" id="ttsOverlay">
+      <div class="modal glass-card">
+        <div class="modal-header">
+          <h2>Voice Coaching</h2>
+          <button class="modal-close" id="closeTTS">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="field-group">
+            <label>Voice Preset</label>
+            <select id="voicePreset">
+              <option value="default">Default</option>
+              <option value="male_motivational">Male Motivational</option>
+              <option value="female_calm">Female Calm</option>
+              <option value="male_british">Male British</option>
+              <option value="female_motivational">Female Motivational</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>TTS Server URL</label>
+            <input type="text" id="ttsUrl" value="http://localhost:5002" placeholder="http://localhost:5002">
+            <small style="color:#666; margin-top:4px; display:block;">Point to your XTTS FastAPI server</small>
+          </div>
+          <div class="field-group">
+            <label>Volume</label>
+            <input type="range" id="ttsVolume" min="0" max="1" step="0.1" value="0.8" style="width:100%">
+          </div>
+          <div class="field-group" style="display:flex; align-items:center; gap:10px;">
+            <input type="checkbox" id="ttsEnabled" checked>
+            <label for="ttsEnabled" style="margin:0">Enable voice cues</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="modal-save" id="saveTTS">DONE</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TTS Button -->
+    <button class="tts-btn" id="ttsBtn" title="Voice Settings">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+    </button>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>

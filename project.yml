@@ -1,0 +1,58 @@
+name: WorkoutTimer
+options:
+  bundleIdPrefix: com.workout
+  deploymentTarget:
+    iOS: "16.0"
+    watchOS: "9.0"
+  xcodeVersion: "15.0"
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    ENABLE_USER_SCRIPT_SANDBOXING: false
+    CODE_SIGN_STYLE: Automatic
+
+targets:
+  WorkoutTimer:
+    type: application
+    platform: iOS
+    sources:
+      - path: TimerApp/Sources
+        excludes:
+          - "**/.DS_Store"
+    resources:
+      - path: TimerApp/Resources
+    settings:
+      base:
+        INFOPLIST_FILE: TimerApp/Resources/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.workout.timerapp
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: 1
+        DEVELOPMENT_TEAM: ""
+        CODE_SIGN_IDENTITY: ""
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        UIBackgroundModes:
+          - audio
+    dependencies:
+      - target: WorkoutTimerWatch
+        embed: true
+
+  WorkoutTimerWatch:
+    type: application
+    platform: watchOS
+    sources:
+      - path: TimerApp/WatchApp
+        excludes:
+          - "**/.DS_Store"
+    settings:
+      base:
+        INFOPLIST_FILE: TimerApp/WatchApp/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.workout.timerapp.watchkitapp
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: 1
+        DEVELOPMENT_TEAM: ""
+        CODE_SIGN_IDENTITY: ""
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        WATCHOS_DEPLOYMENT_TARGET: "9.0"
+        WK_COMPANION_APP_BUNDLE_IDENTIFIER: com.workout.timerapp
