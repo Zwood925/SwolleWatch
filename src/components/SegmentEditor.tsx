@@ -112,7 +112,7 @@ export function SegmentEditor({
       </View>
 
       <Text className="text-neutral-400 text-xs mb-1">Beep Type</Text>
-      <View className="flex-row flex-wrap mb-4 gap-2">
+      <View className="flex-row flex-wrap mb-3 gap-2">
         {BEEP_TYPES.map((beepType) => {
           const selected = segment.beepType === beepType;
           return (
@@ -134,6 +134,34 @@ export function SegmentEditor({
           );
         })}
       </View>
+
+      <Text className="text-neutral-400 text-xs mb-1">Target HR Zone</Text>
+      <TextInput
+        className="bg-neutral-800 text-white rounded-lg px-3 py-2 mb-3 border border-neutral-700"
+        placeholder="e.g. Zone 2"
+        placeholderTextColor="#737373"
+        value={segment.targetHrZone ?? ''}
+        onChangeText={(targetHrZone) => update({ targetHrZone })}
+      />
+
+      <Text className="text-neutral-400 text-xs mb-1">Target Cadence</Text>
+      <TextInput
+        className="bg-neutral-800 text-white rounded-lg px-3 py-2 mb-3 border border-neutral-700"
+        placeholder="e.g. 90 rpm"
+        placeholderTextColor="#737373"
+        value={segment.targetCadence ?? ''}
+        onChangeText={(targetCadence) => update({ targetCadence })}
+      />
+
+      <Text className="text-neutral-400 text-xs mb-1">Notes</Text>
+      <TextInput
+        className="bg-neutral-800 text-white rounded-lg px-3 py-2 mb-4 border border-neutral-700"
+        placeholder="Form cues, focus points..."
+        placeholderTextColor="#737373"
+        value={segment.notes ?? ''}
+        onChangeText={(notes) => update({ notes })}
+        multiline
+      />
 
       <View className="border-t border-neutral-800 pt-3">
         <View className="flex-row items-center justify-between mb-2">

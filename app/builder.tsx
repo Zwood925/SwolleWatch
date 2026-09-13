@@ -28,6 +28,9 @@ function createDefaultSegment(): Segment {
     countIn: 3,
     beepType: 'Tick',
     voiceCues: [],
+    targetHrZone: '',
+    targetCadence: '',
+    notes: '',
   };
 }
 
@@ -37,6 +40,9 @@ function createDraftWorkout(existing: Workout | undefined): Workout {
       ...existing,
       segments: existing.segments.map((segment) => ({
         ...segment,
+        targetHrZone: segment.targetHrZone ?? '',
+        targetCadence: segment.targetCadence ?? '',
+        notes: segment.notes ?? '',
         voiceCues: segment.voiceCues.map((cue) => ({ ...cue })),
       })),
     };

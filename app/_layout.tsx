@@ -20,6 +20,10 @@ export default function RootLayout() {
           name="builder"
           options={{ title: 'Builder', presentation: 'modal' }}
         />
+        <Stack.Screen
+          name="workout/[id]"
+          options={{ title: 'Active Workout', headerShown: false }}
+        />
       </Stack>
     </>
   );
