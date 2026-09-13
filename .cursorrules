@@ -1,0 +1,20 @@
+# SwolleWatch Cursor Rules (.cursorrules)
+
+## Stack & Architecture
+- Framework: React Native with Expo (Managed Workflow, SDK 51+)
+- Navigation: Expo Router (File-based navigation)
+- State Management: Zustand with AsyncStorage persistence
+- Styling: NativeWind (Tailwind CSS for React Native)
+- Audio/TTS: Native iOS `expo-speech` for Text-To-Speech & `expo-av` for audio chimes
+- Language: TypeScript (Strict mode enabled)
+
+## Code Quality & Conventions
+1. Keep UI components small, modular, and reusable in `src/components/`.
+2. Do NOT use Python, HTML, or FastAPI backend code in this React Native app.
+3. Handle dark mode natively using NativeWind class names (`bg-black`, `text-white`, `border-neutral-800`).
+4. Ensure all interval timer logic is localized inside a dedicated Zustand store (`useWorkoutStore`).
+5. Never hardcode workout segments—allow dynamic array operations (add, edit, remove, reorder).
+
+## AI Behavior
+- Keep responses concise and focused purely on React Native / Expo code.
+- Always provide complete TypeScript interfaces for state objects.
